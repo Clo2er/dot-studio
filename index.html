@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Dot Studio</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:#FAF4E8;color:#3D2E1F;font-family:Georgia,'Times New Roman',serif;min-height:100vh;padding-bottom:60px}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:2px solid #D4C5B0;background:#F5ECD7;position:sticky;top:0;z-index:10}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-d{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle,#C4956A 30%,#8B4513 100%);border:2px solid #D4C5B0}
+.logo-t{font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#5A4630}
+.b{padding:6px 14px;font-size:11px;border-radius:6px;border:1.5px solid #D4C5B0;background:#EDE3D0;color:#6B5C4D;cursor:pointer;font-family:inherit;font-weight:600}
+.bp{padding:6px 14px;font-size:11px;border-radius:6px;border:none;background:#8B4513;color:#F5ECD7;cursor:pointer;font-family:inherit;font-weight:600}
+.pw{padding:14px;display:flex;justify-content:center;background:#F0E8D8;border-bottom:1.5px solid #E8DCCA}
+.pw canvas{max-width:100%;border-radius:8px;border:2px solid #D4C5B0;box-shadow:0 2px 12px rgba(90,70,48,.1)}
+.mb{display:flex;border-bottom:1.5px solid #E8DCCA}
+.mt{flex:1;padding:9px 0;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:0;border:none;border-bottom:2px solid transparent;color:#A89880;cursor:pointer;font-family:inherit;transition:all .2s}
+.mt.on{background:#F5ECD7;border-bottom-color:#8B4513;color:#5A4630}
+.sec{padding:14px;border-bottom:1.5px solid #E8DCCA}
+.st{font-size:10px;font-weight:700;letter-spacing:.1em;color:#6B5C4D;text-transform:uppercase;margin-bottom:10px}
+.row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.cw{position:relative}
+.cs{width:36px;height:36px;border-radius:8px;border:2px solid #D4C5B0;cursor:pointer}
+.ci{position:absolute;inset:0;opacity:0;cursor:pointer;width:36px;height:36px}
+.hi{flex:1;background:#F5ECD7;border:1.5px solid #D4C5B0;border-radius:8px;padding:7px 10px;font-size:12px;font-family:'Courier New',monospace;letter-spacing:.1em;color:#3D2E1F;outline:none}
+.sr{margin-bottom:12px}
+.sh{display:flex;justify-content:space-between;margin-bottom:4px}
+.sl{font-size:10px;font-weight:700;letter-spacing:.08em;color:#6B5C4D;text-transform:uppercase}
+.sv{font-size:11px;font-family:'Courier New',monospace;color:#8B7355}
+input[type=range]{width:100%;accent-color:#8B4513}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px}
+.ch{padding:9px 10px;font-size:11px;border-radius:7px;font-weight:600;cursor:pointer;font-family:inherit;border:1.5px solid #D4C5B0;background:#F5ECD7;color:#6B5C4D;transition:all .15s}
+.ch.on{background:#8B4513;color:#F5ECD7;border-color:#8B4513}
+.tr{display:flex;align-items:center;justify-content:space-between;padding:4px 0}
+.tl{font-size:11px;font-weight:600;color:#5A4630}
+.tog{position:relative;width:44px;height:24px;cursor:pointer;display:inline-block}
+.tog input{display:none}
+.tog .tk{position:absolute;inset:0;background:#D4C5B0;border-radius:12px;transition:background .2s}
+.tog input:checked+.tk{background:#8B4513}
+.tog .tm{position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.tog input:checked~.tm{transform:translateX(20px)}
+.ti{width:100%;padding:8px 10px;font-size:13px;border-radius:8px;border:1.5px solid #D4C5B0;background:#F5ECD7;color:#3D2E1F;font-family:Georgia,serif;outline:none}
+.sel{width:100%;padding:8px 10px;font-size:12px;border-radius:8px;border:1.5px solid #D4C5B0;background:#F5ECD7;color:#3D2E1F;font-family:inherit}
+.pg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pb{height:56px;border-radius:8px;border:2px solid #D4C5B0;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.pb:active{transform:scale(.97)}
+.pd{display:flex;gap:3px}
+.pn{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-family:Georgia,serif}
+.ua{padding:16px;text-align:center;border:2px dashed #D4C5B0;border-radius:10px;cursor:pointer;margin:14px;color:#8B7355;font-size:12px;font-weight:600}
+.ua:active{border-color:#8B4513}
+.ch-hd{display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none}
+.ch-ar{font-size:10px;color:#A89880;transition:transform .2s}
+.ch-ar.op{transform:rotate(180deg)}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="logo"><div class="logo-d"></div><span class="logo-t">Dot Studio</span></div>
+  <div style="display:flex;gap:6px">
+    <button class="b" id="uBtn">Upload</button>
+    <button class="b" id="sBtn">Shuffle</button>
+    <button class="bp" id="eBtn">Export</button>
+  </div>
+</div>
+<div class="mb">
+  <button class="mt on" data-m="polaroid">Polaroid</button>
+  <button class="mt" data-m="overlay">Overlay</button>
+</div>
+<div class="pw"><canvas id="pv"></canvas></div>
+<input type="file" id="fi" accept="image/*" style="display:none">
+<div id="np"><div class="ua" id="uArea">Tap to upload a photo</div></div>
+
+<div class="sec">
+  <div class="ch-hd" data-t="lc"><div class="st" style="margin:0">Layout</div><span class="ch-ar op">&#9660;</span></div>
+  <div id="lc" style="margin-top:10px">
+    <div class="st">Canvas Size</div>
+    <div class="g4" id="sg"></div>
+    <div id="pc" style="margin-top:14px">
+      <div class="tr" style="margin-bottom:10px"><span class="tl">Polaroid Frame</span><label class="tog"><input type="checkbox" id="ft" checked><div class="tk"></div><div class="tm"></div></label></div>
+      <div class="sr"><div class="sh"><span class="sl">Photo Size</span><span class="sv" id="scV">82%</span></div><input type="range" min="20" max="98" value="82" id="scS"></div>
+      <div class="sr"><div class="sh"><span class="sl">Tilt</span><span class="sv" id="tlV">0&deg;</span></div><input type="range" min="-15" max="15" value="0" id="tlS"></div>
+      <div style="margin-top:10px"><div class="st">Caption</div><input type="text" class="ti" id="caI" placeholder="Write something..."></div>
+    </div>
+    <div id="oc" style="display:none;margin-top:14px"><div class="st">Blend Mode</div>
+      <select class="sel" id="blS"><option value="normal">Normal</option><option value="multiply">Multiply</option><option value="screen">Screen</option><option value="overlay">Overlay</option><option value="soft-light">Soft Light</option><option value="hard-light">Hard Light</option><option value="difference">Difference</option></select>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="ch-hd" data-t="dc"><div class="st" style="margin:0">Dots</div><span class="ch-ar op">&#9660;</span></div>
+  <div id="dc" style="margin-top:10px">
+    <div class="st">Background</div>
+    <div class="row"><div class="cw"><input type="color" class="ci" id="bgC" value="#F5ECD7"><div class="cs" id="bgS" style="background:#F5ECD7"></div></div><input type="text" class="hi" id="bgH" value="#F5ECD7" maxlength="7"></div>
+    <div class="st">Dot Color</div>
+    <div class="row"><div class="cw"><input type="color" class="ci" id="dtC" value="#8B4513"><div class="cs" id="dtS" style="background:#8B4513"></div></div><input type="text" class="hi" id="dtH" value="#8B4513" maxlength="7"></div>
+    <div class="sr"><div class="sh"><span class="sl">Dot Size</span><span class="sv" id="szV">10px</span></div><input type="range" min="2" max="80" value="10" id="szS"></div>
+    <div class="sr"><div class="sh"><span class="sl">Spacing</span><span class="sv" id="spV">36px</span></div><input type="range" min="10" max="150" value="36" id="spS"></div>
+    <div class="sr"><div class="sh"><span class="sl">Opacity</span><span class="sv" id="opV">55%</span></div><input type="range" min="5" max="100" value="55" id="opS"></div>
+    <div class="st" style="margin-top:10px">Distribution</div>
+    <div class="g2" id="dg"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+      <span style="font-size:10px;font-weight:600;color:#6B5C4D;letter-spacing:.08em;text-transform:uppercase">Seed: <span id="sdV" style="font-family:'Courier New',monospace;color:#8B7355">42</span></span>
+      <button style="font-size:11px;color:#8B4513;background:0;border:0;cursor:pointer;font-weight:600;font-family:inherit;text-decoration:underline" id="rsB">Shuffle</button>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="ch-hd" data-t="prc"><div class="st" style="margin:0">Presets</div><span class="ch-ar op">&#9660;</span></div>
+  <div id="prc" style="margin-top:10px"><div class="pg" id="prG"></div></div>
+</div>
+
+<script>
+const P=[
+  {n:"Darkroom",bg:"#2B1B17",d:"#C4956A",sz:14,sp:42,dt:"offset",op:.7},
+  {n:"Old Film",bg:"#F5ECD7",d:"#8B4513",sz:10,sp:36,dt:"grid",op:.55},
+  {n:"Matisse",bg:"#1B3A4B",d:"#E8C547",sz:24,sp:58,dt:"random",op:.9},
+  {n:"Faded Rose",bg:"#F2E2D2",d:"#B5495B",sz:18,sp:50,dt:"offset",op:.6},
+  {n:"Olive Press",bg:"#F0EAD6",d:"#606C38",sz:12,sp:40,dt:"grid",op:.65},
+  {n:"Kusama",bg:"#FFD600",d:"#E53935",sz:28,sp:60,dt:"random",op:.95}
+];
+const DL={grid:"Grid",offset:"Brick",random:"Random",scatter:"Scatter"};
+const SZ=[{id:"story",l:"Story",w:1080,h:1920},{id:"sq",l:"1:1",w:1080,h:1080},{id:"xhs",l:"3:4",w:1080,h:1440},{id:"wall",l:"Wall",w:1170,h:2532}];
+let S={mode:"polaroid",bg:"#F5ECD7",dot:"#8B4513",sz:10,sp:36,dt:"grid",op:.55,sd:42,es:"sq",sc:82,tl:0,ca:"",fr:true,bl:"normal",img:null};
+
+function sR(s){let v=s;return()=>{v=(v*16807)%2147483647;return v/2147483647}}
+function hR(h){const m=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(h);return m?{r:parseInt(m[1],16),g:parseInt(m[2],16),b:parseInt(m[3],16)}:{r:0,g:0,b:0}}
+function gD(w,h,sz,sp,dt,sd){
+  const ds=[],r=sz/2,rn=sR(sd);
+  if(dt==="grid"){for(let y=sp/2;y<h+sp;y+=sp)for(let x=sp/2;x<w+sp;x+=sp)ds.push({x,y,r})}
+  else if(dt==="offset"){let row=0;for(let y=sp/2;y<h+sp;y+=sp*.866){const o=row%2?sp/2:0;for(let x=sp/2+o;x<w+sp;x+=sp)ds.push({x,y,r});row++}}
+  else if(dt==="random"){const c=Math.ceil(w/sp)+1,rs=Math.ceil(h/sp)+1;for(let row=0;row<rs;row++)for(let col=0;col<c;col++)ds.push({x:col*sp+sp/2+(rn()-.5)*sp*.7,y:row*sp+sp/2+(rn()-.5)*sp*.7,r:r*(.7+rn()*.6)})}
+  else{const n=Math.floor(w*h/(sp*sp))*2;for(let i=0;i<n;i++)ds.push({x:rn()*w,y:rn()*h,r:r*(.3+rn()*1.2)})}
+  return ds
+}
+function pD(ctx,w,h,dc,sz,sp,dt,op,sd){const c=hR(dc);gD(w,h,sz,sp,dt,sd).forEach(d=>{ctx.beginPath();ctx.arc(d.x,d.y,Math.max(d.r,1),0,Math.PI*2);ctx.fillStyle=`rgba(${c.r},${c.g},${c.b},${op})`;ctx.fill()})}
+
+function rndr(cv,W,H,ex){
+  const s=S,dp=ex?1:Math.min(devicePixelRatio||1,2);
+  cv.width=W*dp;cv.height=H*dp;
+  const ctx=cv.getContext("2d");ctx.scale(dp,dp);
+  if(!ex){cv.style.width=W+"px";cv.style.height=H+"px"}
+  const m=ex?3:1;
+
+  if(s.mode==="overlay"&&s.img){
+    const r=Math.max(W/s.img.width,H/s.img.height);
+    ctx.drawImage(s.img,(W-s.img.width*r)/2,(H-s.img.height*r)/2,s.img.width*r,s.img.height*r);
+    ctx.save();if(s.bl!=="normal")ctx.globalCompositeOperation=s.bl;
+    pD(ctx,W,H,s.dot,s.sz*m,s.sp*m,s.dt,s.op,s.sd);ctx.restore()
+  } else {
+    ctx.fillStyle=s.bg;ctx.fillRect(0,0,W,H);
+    pD(ctx,W,H,s.dot,s.sz*m,s.sp*m,s.dt,s.op,s.sd);
+
+    if(s.img&&s.mode==="polaroid"){
+      const img=s.img, ps=s.sc/100;
+      // photo width = canvas width * scale directly
+      const fw=W*ps;
+      const asp=img.height/img.width, ih=fw*asp;
+      // clamp photo height to canvas
+      let finalW=fw, finalH=ih;
+      if(finalH>H*ps){finalH=H*ps;finalW=finalH/asp}
+
+      const cx=W/2, cy=H/2, ag=s.tl*Math.PI/180;
+
+      if(s.fr){
+        // with frame
+        const bd=ex?36:12;
+        const bb=s.ca?(ex?90:30):(ex?50:16);
+        const tw=finalW+bd*2, th=finalH+bd+bb;
+        ctx.save();ctx.translate(cx,cy);ctx.rotate(ag);
+        ctx.shadowColor="rgba(0,0,0,.15)";ctx.shadowBlur=ex?28:8;ctx.shadowOffsetY=ex?6:2;
+        const cr=ex?6:2,rx=-tw/2,ry=-th/2;
+        ctx.fillStyle="#FFF";ctx.beginPath();
+        ctx.moveTo(rx+cr,ry);ctx.lineTo(rx+tw-cr,ry);ctx.quadraticCurveTo(rx+tw,ry,rx+tw,ry+cr);
+        ctx.lineTo(rx+tw,ry+th-cr);ctx.quadraticCurveTo(rx+tw,ry+th,rx+tw-cr,ry+th);
+        ctx.lineTo(rx+cr,ry+th);ctx.quadraticCurveTo(rx,ry+th,rx,ry+th-cr);
+        ctx.lineTo(rx,ry+cr);ctx.quadraticCurveTo(rx,ry,rx+cr,ry);ctx.fill();
+        ctx.shadowColor="transparent";
+        ctx.drawImage(img,rx+bd,ry+bd,finalW,finalH);
+        if(s.ca){const fs=ex?28:10;ctx.font=fs+"px Georgia,serif";ctx.fillStyle="#5A4630";ctx.textAlign="center";ctx.fillText(s.ca,0,ry+bd+finalH+bb*.65,tw-bd*2)}
+        ctx.restore();
+      } else {
+        // no frame, just photo with round corners + subtle shadow
+        ctx.save();ctx.translate(cx,cy);ctx.rotate(ag);
+        ctx.shadowColor="rgba(0,0,0,.12)";ctx.shadowBlur=ex?20:6;ctx.shadowOffsetY=ex?4:2;
+        const cr=ex?10:3, rx=-finalW/2, ry=-finalH/2;
+        ctx.beginPath();
+        ctx.moveTo(rx+cr,ry);ctx.lineTo(rx+finalW-cr,ry);ctx.quadraticCurveTo(rx+finalW,ry,rx+finalW,ry+cr);
+        ctx.lineTo(rx+finalW,ry+finalH-cr);ctx.quadraticCurveTo(rx+finalW,ry+finalH,rx+finalW-cr,ry+finalH);
+        ctx.lineTo(rx+cr,ry+finalH);ctx.quadraticCurveTo(rx,ry+finalH,rx,ry+finalH-cr);
+        ctx.lineTo(rx,ry+cr);ctx.quadraticCurveTo(rx,ry,rx+cr,ry);
+        ctx.closePath();ctx.clip();
+        ctx.shadowColor="transparent";
+        ctx.drawImage(img,rx,ry,finalW,finalH);
+        ctx.restore();
+
+        if(s.ca){
+          ctx.save();ctx.translate(cx,cy);ctx.rotate(ag);
+          const fs=ex?24:9;ctx.font=fs+"px Georgia,serif";
+          const mt=ctx.measureText(s.ca);const pw=mt.width+fs*2,ph=fs*2.2;
+          const bry=finalH/2+fs*.8;
+          ctx.fillStyle="rgba(255,255,255,.85)";
+          const bcr=ex?6:2;ctx.beginPath();
+          ctx.moveTo(-pw/2+bcr,bry);ctx.lineTo(pw/2-bcr,bry);ctx.quadraticCurveTo(pw/2,bry,pw/2,bry+bcr);
+          ctx.lineTo(pw/2,bry+ph-bcr);ctx.quadraticCurveTo(pw/2,bry+ph,pw/2-bcr,bry+ph);
+          ctx.lineTo(-pw/2+bcr,bry+ph);ctx.quadraticCurveTo(-pw/2,bry+ph,-pw/2,bry+ph-bcr);
+          ctx.lineTo(-pw/2,bry+bcr);ctx.quadraticCurveTo(-pw/2,bry,-pw/2+bcr,bry);ctx.fill();
+          ctx.fillStyle="#5A4630";ctx.textAlign="center";ctx.fillText(s.ca,0,bry+ph*.62);
+          ctx.restore();
+        }
+      }
+    }
+  }
+}
+
+function rf(){
+  const e=SZ.find(s=>s.id===S.es);
+  const a=e.h/e.w;
+  const pw=Math.min(340,innerWidth-28);
+  const ph=Math.round(pw*a);
+  rndr(document.getElementById("pv"),pw,ph);
+}
+function rs(){S.sd=Math.floor(Math.random()*1e5);document.getElementById("sdV").textContent=S.sd;rf()}
+
+// build dist buttons
+const dg=document.getElementById("dg");
+["grid","offset","random","scatter"].forEach(d=>{
+  const b=document.createElement("button");b.className="ch"+(S.dt===d?" on":"");
+  b.textContent=DL[d];b.dataset.d=d;
+  b.onclick=()=>{S.dt=d;dg.querySelectorAll(".ch").forEach(c=>c.classList.toggle("on",c.dataset.d===d));
+  if(d==="random"||d==="scatter")rs();else rf()};dg.appendChild(b)
+});
+
+// build size buttons
+const sg=document.getElementById("sg");
+SZ.forEach(s=>{
+  const b=document.createElement("button");b.className="ch"+(S.es===s.id?" on":"");
+  b.textContent=s.l;b.dataset.s=s.id;
+  b.onclick=()=>{S.es=s.id;sg.querySelectorAll(".ch").forEach(c=>c.classList.toggle("on",c.dataset.s===s.id));rf()};
+  sg.appendChild(b)
+});
+
+// build presets
+const prG=document.getElementById("prG");
+function lm(h){const c=hR(h);return(.299*c.r+.587*c.g+.114*c.b)/255}
+P.forEach(p=>{
+  const b=document.createElement("button");b.className="pb";b.style.background=p.bg;
+  b.innerHTML='<div class="pd">'+[0,1,2].map(()=>'<span style="width:'+Math.max(p.sz*.3,5)+'px;height:'+Math.max(p.sz*.3,5)+'px;border-radius:50%;background:'+p.d+';opacity:'+p.op+';display:inline-block"></span>').join("")+'</div><span class="pn" style="color:'+(lm(p.bg)>.55?"#5A4630":"rgba(255,255,255,.8)")+'">'+p.n+"</span>";
+  b.onclick=()=>{S.bg=p.bg;S.dot=p.d;S.sz=p.sz;S.sp=p.sp;S.dt=p.dt;S.op=p.op;syncUI();rs()};
+  prG.appendChild(b)
+});
+
+function syncUI(){
+  document.getElementById("bgC").value=S.bg;document.getElementById("bgS").style.background=S.bg;document.getElementById("bgH").value=S.bg.toUpperCase();
+  document.getElementById("dtC").value=S.dot;document.getElementById("dtS").style.background=S.dot;document.getElementById("dtH").value=S.dot.toUpperCase();
+  document.getElementById("szS").value=S.sz;document.getElementById("szV").textContent=S.sz+"px";
+  document.getElementById("spS").value=S.sp;document.getElementById("spV").textContent=S.sp+"px";
+  document.getElementById("opS").value=Math.round(S.op*100);document.getElementById("opV").textContent=Math.round(S.op*100)+"%";
+  dg.querySelectorAll(".ch").forEach(c=>c.classList.toggle("on",c.dataset.d===S.dt));
+}
+
+// events
+const $=id=>document.getElementById(id);
+$("bgC").oninput=e=>{S.bg=e.target.value;$("bgS").style.background=S.bg;$("bgH").value=S.bg.toUpperCase();rf()};
+$("bgH").onchange=e=>{if(/^#[0-9A-Fa-f]{6}$/.test(e.target.value)){S.bg=e.target.value;$("bgC").value=S.bg;$("bgS").style.background=S.bg;rf()}};
+$("dtC").oninput=e=>{S.dot=e.target.value;$("dtS").style.background=S.dot;$("dtH").value=S.dot.toUpperCase();rf()};
+$("dtH").onchange=e=>{if(/^#[0-9A-Fa-f]{6}$/.test(e.target.value)){S.dot=e.target.value;$("dtC").value=S.dot;$("dtS").style.background=S.dot;rf()}};
+$("szS").oninput=e=>{S.sz=+e.target.value;$("szV").textContent=S.sz+"px";rf()};
+$("spS").oninput=e=>{S.sp=+e.target.value;$("spV").textContent=S.sp+"px";rf()};
+$("opS").oninput=e=>{S.op=+e.target.value/100;$("opV").textContent=e.target.value+"%";rf()};
+$("scS").oninput=e=>{S.sc=+e.target.value;$("scV").textContent=S.sc+"%";rf()};
+$("tlS").oninput=e=>{S.tl=+e.target.value;$("tlV").innerHTML=S.tl+"&deg;";rf()};
+$("caI").oninput=e=>{S.ca=e.target.value;rf()};
+$("ft").onchange=e=>{S.fr=e.target.checked;rf()};
+$("blS").onchange=e=>{S.bl=e.target.value;rf()};
+$("rsB").onclick=rs;$("sBtn").onclick=rs;
+
+document.querySelectorAll(".mt").forEach(b=>b.onclick=()=>{
+  S.mode=b.dataset.m;
+  document.querySelectorAll(".mt").forEach(m=>m.classList.toggle("on",m===b));
+  $("pc").style.display=S.mode==="polaroid"?"block":"none";
+  $("oc").style.display=S.mode==="overlay"?"block":"none";
+  rf()
+});
+
+$("uBtn").onclick=()=>$("fi").click();
+$("uArea").onclick=()=>$("fi").click();
+$("fi").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const img=new Image;
+  img.onload=()=>{S.img=img;$("np").style.display="none";$("uBtn").textContent="Replace";rf()};
+  img.src=URL.createObjectURL(f);
+};
+
+$("eBtn").onclick=()=>{
+  const e=SZ.find(s=>s.id===S.es);
+  const c=document.createElement("canvas");
+  rndr(c,e.w,e.h,true);
+  const a=document.createElement("a");
+  a.download="dot-studio-"+Date.now()+".png";
+  a.href=c.toDataURL("image/png");
+  a.click();
+};
+
+document.querySelectorAll(".ch-hd").forEach(h=>h.onclick=()=>{
+  const t=$(h.dataset.t),a=h.querySelector(".ch-ar");
+  if(t.style.display==="none"){t.style.display="block";a.classList.add("op")}
+  else{t.style.display="none";a.classList.remove("op")}
+});
+
+rf();
+</script>
+</body>
+</html>
