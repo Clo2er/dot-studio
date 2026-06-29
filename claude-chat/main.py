@@ -7,7 +7,7 @@ import uvicorn
 app = FastAPI()
 CLAUDE = shutil.which("claude") or "claude"
 BASE_SYS = "你是一个有用的助手，请用简洁自然的方式回答。"
-MODEL = "claude-opus-4-8"
+MODEL = "claude-opus-4-6"
 SESS_FILE = "sessions.json"
 
 def read_file(name):
